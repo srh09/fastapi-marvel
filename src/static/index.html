@@ -9,47 +9,46 @@
   <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
 </head>
 
-<body x-data>
+<body x-data="{ navActive: 'home' }">
   <!-- Navbar -->
-  <div x-data="{ navActive: 'home' }">
-    <nav>
-      <ul>
-        <li id="push"></li>
-        <li><a @click="navActive='home'" href="#">Home</a></li>
-        <li><a @click="navActive='news'" href="#">Character</a></li>
-        <li><a @click="navActive='contact'" href="#">Contact</a></li>
-        <li><a @click="navActive='about'" href="#">About</a></li>
-      </ul>
-    </nav>
-    
-    <p>FastAPI Playground</p>
-    <p>Come try out new ideas with a simple setup...</p>
-    <button @click="sayHi()">...</button>
-    <button @click="sayBye()">Hi button</button>
-    <!-- Character Detail Card -->
-    <template x-if="navActive == 'home'">
-      <div id="mLCard">
-        <img src="https://terrigen-cdn-dev.marvel.com/content/prod/1x/180mrb_com_mas_mob_01.jpg" alt="Lago di Braies">
-        <div class="card__details">
-          <span class="tag">Super Cool</span>
-          <span class="tag">Super Fast</span>
-          <div x-text="mCharacter.name" class="name"></div>
-          <p x-text="mCharacter.description"></p>
-          <button x-text="mCharacter.id"></button>
-        </div>
-      </div>
-    </template>
+  <nav>
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a @click="navActive='home'" href="#">
+          <img src="img/fastapi.svg" alt="FastApi Logo" height="35" width="35">
+        </a>
+      </li>
+      <li class="nav-item"><a @click="navActive='home'" href="#">Playground</a></li>
+      <li class="nav-item"><a @click="navActive='marvel'" href="#">Marvel</a></li>
+      <li class="nav-item"><a @click="navActive='about'" href="#">About</a></li>
+    </ul>
+  </nav>
 
-    <template x-if="navActive == 'news'">
-      <p>character Contents...</p>
-    </template>
-    <template x-if="navActive == 'contact'">
-      <p>contact Contents...</p>
-    </template>
-    <template x-if="navActive == 'about'">
-      <p>about Contents...</p>
-    </template>
-  </div>
+  <!-- Playground Home -->
+  <template x-if="navActive == 'home'">
+    <div>
+      <p>FastAPI Playground</p>
+      <p>Come try out new ideas with a simple setup...</p>
+      <button @click="sayHi()">...</button>
+      <button @click="sayBye()">Hi button</button>
+    </div>
+  </template>
+  <!-- Marvel -->
+  <template x-if="navActive == 'marvel'">
+    <div id="mLCard">
+      <img src="https://terrigen-cdn-dev.marvel.com/content/prod/1x/180mrb_com_mas_mob_01.jpg" alt="Lago di Braies">
+      <div class="card__details">
+        <span class="tag">Super Cool</span>
+        <span class="tag">Super Fast</span>
+        <div x-text="mCharacter.name" class="name"></div>
+        <p x-text="mCharacter.description"></p>
+        <button x-text="mCharacter.id"></button>
+      </div>
+    </div>
+  </template>
+  <template x-if="navActive == 'about'">
+    <p>about Contents...</p>
+  </template>
 </body>
 
 </html>

@@ -1,24 +1,55 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600&display=swap");
 
+
+:root {
+    --primary: #006CE8;
+    --primaryL: #e0efff;
+    --accent: #E80800;
+    --accentL: #E8BAB8;
+}
+
+
 body {
+    margin: auto;
     background-color: #eaeff1;
     font-family: "Raleway", sans-serif;
 }
 
+
 /* Navbar */
-nav ul {
+.nav-list {
     display: flex;
-    border-radius: 12px;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+    padding: .5rem 0;
+    border-radius: 8px;
     background-color: white;
 }
-nav li {
-    display: inline;
-    padding: 1em;
-}
-nav #push {
-    margin-right: auto;
+
+.nav-item {
+    list-style: none;
+    margin-right: 2rem;
 }
 
+.nav-item a {
+    text-decoration: none;
+    color: black;
+    transition:all 200ms ease-in;
+}
+
+.nav-item a:hover {
+    color: var(--accent);
+}
+
+.nav-item:first-child {
+    margin-left: 2rem;
+    margin-right: .5rem;
+}
+
+.nav-item:nth-child(2) {
+    margin-right: auto;
+}
 
 
 /* Card */
@@ -31,12 +62,14 @@ nav #push {
     padding: 8px;
     border-radius: 12px;
 }
+
 #mLCard img {
     width: 100%;
     border-radius: 12px;
     height: 214px;
     object-fit: cover;
 }
+
 #mLCard .tag {
     padding: 4px 8px;
     border: 1px solid #e5eaed;
@@ -45,32 +78,53 @@ nav #push {
     font-weight: 600;
     color: #788697;
 }
+
 #mLCard .name {
     font-size: 24px;
     font-weight: 600;
 
     margin-top: 16px;
 }
+
 #mLCard p {
     font-size: 14px;
     color: #7f8c9b;
     line-height: 150%;
 }
+
 #mLCard button {
     border: none;
     padding: 12px 24px;
     border-radius: 50px;
     font-weight: 600;
-    color: #0077ff;
-    background-color: #e0efff;
+    color: var(--primary);
+    background-color: var(--primaryL);
     margin: 0 auto;
     display: block;
     cursor: pointer;
 }
+
 #mLCard .card__details {
     padding: 16px 8px 8px 8px;
 }
+
 #mLCard button:hover {
-  background-color: #0077ff;
-  color: #e0efff;
+    background-color: var(--primary);
+    color: #e0efff;
+}
+
+.nav{
+    border:1px solid #ccc;
+    border-width:1px 0;
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+.nav li{
+    display:inline;
+}
+.nav a{
+    display:inline-block;
+    padding:10px;
 }
