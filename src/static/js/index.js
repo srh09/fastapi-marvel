@@ -7,3 +7,11 @@ let mCharacter = {
     'description': 'Nice and thorough description of Spectrum',
     'picture': null
 }
+
+const logo = document.getElementById('logo')
+logo.addEventListener('mouseenter', () => {
+    logo.style.animation = "runAway 8s"
+})
+logo.addEventListener('animationend', () => {
+    logo.style.animation = null;
+})

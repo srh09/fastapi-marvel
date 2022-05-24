@@ -15,6 +15,10 @@ body {
     font-family: "Raleway", sans-serif;
 }
 
+#container {
+    margin: 10px;
+}
+
 
 /* Navbar */
 .nav-list {
@@ -35,7 +39,7 @@ body {
 .nav-item a {
     text-decoration: none;
     color: black;
-    transition:all 200ms ease-in;
+    transition: all 200ms ease-in;
 }
 
 .nav-item a:hover {
@@ -113,18 +117,35 @@ body {
     color: #e0efff;
 }
 
-.nav{
-    border:1px solid #ccc;
-    border-width:1px 0;
-    list-style:none;
-    margin:0;
-    padding:0;
-    text-align:center;
+.nav {
+    border: 1px solid #ccc;
+    border-width: 1px 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
-.nav li{
-    display:inline;
+
+.nav li {
+    display: inline;
 }
-.nav a{
-    display:inline-block;
-    padding:10px;
+
+.nav a {
+    display: inline-block;
+    padding: 10px;
+}
+
+
+@keyframes runAway {
+    1%, 9% { transform: translate(-1px, 0); }
+    2%, 8% { transform: translate(2px, 0); }
+    3%, 5%, 7% { transform: translate(-4px, 0); }
+    4%, 6% { transform: translate(4px, 0); }
+    11% { transform: translate(100px, 40px); }
+    13% { transform: translate(200px, 300px); }
+    15% { transform: translate(400px, 150px); }
+    18% { transform: translate(-100px, 100px); }
+    90% { transform: translate(0, 0); }
+    18%, 99% { opacity: 1; }
+    19%, 91% { opacity: 0; }
 }
