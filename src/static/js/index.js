@@ -8,7 +8,7 @@ let mCharacter = {
     'picture': null
 }
 
-const logo = document.getElementById('logo')
+const logo = document.getElementById('logo-svg')
 logo.addEventListener('mouseenter', () => {
     logo.style.animation = "runAway 8s"
 })

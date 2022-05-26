@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600&display=swap");
 
-
 :root {
     --primary: #006CE8;
     --primaryL: #e0efff;
@@ -8,20 +7,38 @@
     --accentL: #E8BAB8;
 }
 
-
-body {
-    margin: auto;
-    background-color: #eaeff1;
-    font-family: "Raleway", sans-serif;
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-#container {
-    margin: 10px;
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+nav {
+    flex: 0 1 40px;
+}
+
+main {
+    flex: 1 1 auto;
+    background-color: lightgray;
+}
+
+.row.footer {
+  flex: 0 1 40px;
 }
 
 
 /* Navbar */
 .nav-list {
+    flex: 0 1 auto;
+    height: 40px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -56,25 +73,92 @@ body {
 }
 
 
+/* Menu Card */
+.menu-card {
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid #bacdd8;
+    background-color: white;
+}
+
+
+#marvel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgoldenrodyellow;
+}
+
+/* Search Bar */
+.search {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 10px 0 10px;
+    height: 30px;
+}
+
+.search form {
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex: auto;
+    padding: 2px;
+    border: 2px solid black;
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+
+
+.search input{
+    width: 100%;
+    height: 100%;
+    outline: 0;
+    border: 0;
+    border-radius: inherit;
+    box-sizing: inherit;
+}
+
+.search__icon {
+
+    height: 100%;
+    width: auto;
+    padding: 4px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    fill: white;
+    background-color: black;
+}
+
+.search__close {
+    padding: 3px;
+    width: 30px;
+    fill: red;
+    transition: 500ms fill ease-in;
+}
+
+
 /* Card */
-#mLCard {
+.detail-card {
+    display: flex;
+    flex-direction: column;
     max-width: 300px;
     margin: 0 auto;
-    margin-top: 10em;
     background-color: white;
     border: 1px solid #bacdd8;
     padding: 8px;
     border-radius: 12px;
 }
 
-#mLCard img {
+.detail-card img {
     width: 100%;
     border-radius: 12px;
     height: 214px;
     object-fit: cover;
 }
 
-#mLCard .tag {
+.detail-card .tag {
     padding: 4px 8px;
     border: 1px solid #e5eaed;
     border-radius: 50px;
@@ -83,20 +167,20 @@ body {
     color: #788697;
 }
 
-#mLCard .name {
+.detail-card .name {
     font-size: 24px;
     font-weight: 600;
 
     margin-top: 16px;
 }
 
-#mLCard p {
+.detail-card p {
     font-size: 14px;
     color: #7f8c9b;
     line-height: 150%;
 }
 
-#mLCard button {
+.detail-card button {
     border: none;
     padding: 12px 24px;
     border-radius: 50px;
@@ -108,31 +192,13 @@ body {
     cursor: pointer;
 }
 
-#mLCard .card__details {
+.detail-card .card__details {
     padding: 16px 8px 8px 8px;
 }
 
-#mLCard button:hover {
+.detail-card button:hover {
     background-color: var(--primary);
     color: #e0efff;
-}
-
-.nav {
-    border: 1px solid #ccc;
-    border-width: 1px 0;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-.nav li {
-    display: inline;
-}
-
-.nav a {
-    display: inline-block;
-    padding: 10px;
 }
 
 
