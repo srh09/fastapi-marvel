@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600&display=swap");
 
 :root {
-    --primary: #006CE8;
-    --primaryL: #e0efff;
-    --accent: #E80800;
-    --accentL: #E8BAB8;
+    --primary: #051b33;
+    --primaryL: #a6ccf6;
+    --accent: #c57013;
+    --accentL: #f5c897;
 }
 
 html {
@@ -26,8 +26,11 @@ nav {
 }
 
 main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     flex: 1 1 auto;
-    background-color: lightgray;
+    background: var(--primary);
 }
 
 .row.footer {
@@ -81,31 +84,24 @@ main {
     background-color: white;
 }
 
-
-#marvel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: lightgoldenrodyellow;
-}
-
 /* Search Bar */
 .search {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    align-items: center;
+    height: 35px;
+    width: auto;
     padding: 10px 0 10px;
-    height: 30px;
 }
 
 .search form {
     display: flex;
     align-items: center;
-    position: relative;
     flex: auto;
+    height: 100%;
     padding: 2px;
-    border: 2px solid black;
+    margin-right: 6px;
+    border: 2px solid var(--primary);
     border-radius: 25px;
     box-sizing: border-box;
 }
@@ -114,26 +110,39 @@ main {
 .search input{
     width: 100%;
     height: 100%;
+    margin: 0 10px 0 10px;
     outline: 0;
     border: 0;
     border-radius: inherit;
     box-sizing: inherit;
 }
 
-.search__icon {
+.search input:not(:placeholder-shown) + svg {
+    fill: var(--primary);
+    background-color: var(--primaryL);
+}
 
+.search__glass {
+    cursor: pointer;
     height: 100%;
     width: auto;
     padding: 4px;
     box-sizing: border-box;
     border-radius: 50%;
     fill: white;
-    background-color: black;
+    background-color: var(--primary);
+    transition: 500ms all ease-in;
+}
+
+.search__glass:hover {
+    fill: var(--primary);
+    background-color: var(--primaryL);
 }
 
 .search__close {
-    padding: 3px;
-    width: 30px;
+    cursor: pointer;
+    height: 75%;
+    width: auto;
     fill: red;
     transition: 500ms fill ease-in;
 }
