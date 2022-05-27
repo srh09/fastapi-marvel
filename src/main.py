@@ -12,10 +12,5 @@ app.include_router(character.router)
 app.mount("/", StaticFiles(directory="src/static", html=True), name="static")
 
 
-@app.get("/app")
-def read_main(request):
-    return {"message": "Hello World", "root_path": request.scope.get("root_path")}
-
-
 if __name__ == '__main__':
     uvicorn.run('main:app', reload=True)
