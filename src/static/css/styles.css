@@ -134,17 +134,16 @@ main {
     transition: 500ms all ease-in;
 }
 
-.search__glass:hover {
-    fill: var(--primary);
-    background-color: var(--primaryL);
-}
-
 .search__close {
     cursor: pointer;
     height: 75%;
     width: auto;
-    fill: red;
+    fill: var(--primary);
     transition: 500ms fill ease-in;
+}
+
+.search__close:hover {
+    fill: red;
 }
 
 
