@@ -45,8 +45,8 @@ async def get_character(
     db.commit()
 
     return {
-        'id': 12345,
-        'name': 'Spectrum',
-        'description': 'Nice and thorough description of Spectrum',
+        'id': character.marvel_id,
+        'name': character.name,
+        'description': character.description,
         'picture': None
     }
