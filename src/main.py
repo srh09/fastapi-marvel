@@ -1,12 +1,26 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.handlers import character, test
 from db import base  # noqa: F401 Models must be loaded on app init otherwise SQLAlchemy relationship issues.
 
 app = FastAPI(
     root_path='/src'
+)
+
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
