@@ -13,7 +13,6 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup_event():
     print('things to do when we start-----')
-
 app.include_router(test.router)
 app.include_router(character.router)
 app.mount("/", StaticFiles(directory="src/static", html=True), name="static")

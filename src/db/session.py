@@ -7,12 +7,15 @@ from core.config import DATABASE_URL
 
 
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionMaker = sessionmaker(bind=engine)
 
 
 def get_db() -> Generator:
+    """
+    Starts a new session between the database and application.
+    """
     try:
-        db = SessionLocal()
+        db = SessionMaker()
         yield db
     finally:
         db.close()
