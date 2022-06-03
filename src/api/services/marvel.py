@@ -5,7 +5,6 @@ import aiohttp
 
 from core.config import MARVEL_PRIVATE_KEY, MARVEL_PUBLIC_KEY
 from models.character import Character
-from models.thumbnail import Thumbnail
 
 
 async def get_api_character_by_name(name):
@@ -21,21 +20,18 @@ async def get_api_character_by_name(name):
             if response.status != 200:
                 # TODO Handle error.
                 print('character name api error----')
+                return None
             response = await response.json()
 
     character = None
     if response['data']['results']:
         result = response['data']['results'][0]
-        thumbnail = Thumbnail(**{
-            'path': result['thumbnail']['path'],
-            'extension': result['thumbnail']['extension']
-        })
         character = Character(**{
             'marvel_id': result['id'],
             'name': result['name'],
             'description': result['description'],
             'modified': result['modified'],
-            'thumbnail': thumbnail,
+            'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
         })
 
     return character

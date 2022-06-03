@@ -21,6 +21,5 @@ async def get_character(db: Session = Depends(session.get_db),
         db.add(character)
 
     response = character.to_dict()
-    response['thumbnail'] = character.thumbnail.to_dict()
     db.commit()
     return response
