@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.handlers import character, test
+from api.handlers import comics
 from db import base  # noqa: F401 Models must be loaded on app init otherwise SQLAlchemy relationship issues.
 
 app = FastAPI(
@@ -11,7 +12,6 @@ app = FastAPI(
 )
 
 origins = [
-    'http://localhost',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
@@ -30,6 +30,7 @@ async def startup_event():
     print('things to do when we start-----')
 app.include_router(test.router)
 app.include_router(character.router)
+app.include_router(comics.router)
 app.mount("/", StaticFiles(directory="src/static", html=True), name="static")
 
 
