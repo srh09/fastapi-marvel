@@ -1,6 +1,7 @@
+import asyncio
 import hashlib
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set, Tuple
 
 import aiohttp
 from requests import HTTPError
@@ -10,6 +11,7 @@ from models.character import Character
 from models.comic import Comic
 
 MARVEL_BASE_URL = 'https://gateway.marvel.com/v1/public'
+MAX_RESULTS = 50  # Iron man has 2600 comics alone... Remove this if you want all data.
 
 
 def _get_credentials():
@@ -34,6 +36,19 @@ async def _send_get_request(uri: str):
             return await response.json()
 
 
+async def semaphore_gather(tasks, task_limit):
+    """
+    Limits the max concurrent asyncio tasks.
+    """
+    semaphore = asyncio.Semaphore(task_limit)
+
+    async def _wrap_task(task):
+        async with semaphore:
+            return await task
+
+    return await asyncio.gather(*(_wrap_task(t) for t in tasks))
+
+
 async def get_character_by_id(marvel_id: int) -> Character:
     """
     :param int marvel_id: Marvel API id of the Character to be found.
@@ -46,6 +61,7 @@ async def get_character_by_id(marvel_id: int) -> Character:
         raise TypeError('No Character found for given marvel_id.')
 
     result = response['data']['results'][0]
+    print(f'Character {result["name"]} from Marvel-----------')
     return Character(**{
         'marvel_id': result['id'],
         'comic_count': result['comics']['available'],
@@ -79,19 +95,18 @@ async def get_character_by_name(name: str) -> Optional[Character]:
     })
 
 
-async def get_comics_by_character_id(marvel_id: int) -> List[Dict]:
+async def get_comics_by_character_id(marvel_id: int) -> Tuple[List[Dict], Set]:
     """
     :param int marvel_id: Marvel API id of the Character to be referenced.
     :return: List Comics and affiliated Character marvel_ids
     :raise Exception: exception on http error TODO
     """
     offset = 0
-    increment = 20
+    increment = 25
     uri = f'{MARVEL_BASE_URL}/characters/{marvel_id}/comics?{_get_credentials()}&limit={increment}'
     results = []
 
-    safety_switch = 0  # here for testing so i dont lose api privileges :(
-    while True:
+    while True:  # We don't know the total until first response is received.
         async with aiohttp.ClientSession() as session:
             async with session.get(f'{uri}&offset={offset}') as response:
                 if response.status != 200:
@@ -102,15 +117,9 @@ async def get_comics_by_character_id(marvel_id: int) -> List[Dict]:
                 offset += response['data']['count']
                 if offset >= response['data']['total']:
                     break
-                safety_switch += 1
-                if safety_switch > 2:
-                    print('Threw the switch!!!!!-------')
+                if len(results) >= MAX_RESULTS:
                     break
 
-    print('here we are-----')
-    print(len(results))
-    print(offset)
-    print(increment)
     # Organize the results.
     comics_relationships: List[Dict] = []
     unique_character_ids = set()
@@ -125,6 +134,7 @@ async def get_comics_by_character_id(marvel_id: int) -> List[Dict]:
         # Extract the Comic and its Character relationships.
         character_ids = [int(item['resourceURI'].split('/')[-1]) for item in result['characters']['items']]
         unique_character_ids.update(character_ids)
+        print(f'storing comic {result["title"]} from marvel-----------')
         comics_relationships.append({
             'comic': Comic(**{
                 'marvel_id': result['id'],

@@ -9,6 +9,7 @@ from db import session
 from models.character import Character
 from models.comic import Comic
 from api.services import marvel
+from api.services.marvel import semaphore_gather
 
 router = APIRouter()
 
@@ -20,15 +21,21 @@ async def get_comics_by_character(marvel_id: int, db: Session = Depends(session.
         # Get the Character's Comics from Marvel
         comics_relationships, ucis = await marvel.get_comics_by_character_id(main.marvel_id)
 
-        # Get all of the Characters related to the Comics
+        # Get all of the Characters related to the Comics.
+        tasks = []
         character_id2character = {}
         for uci in ucis:
             character: Character = db.query(Character).filter(Character.marvel_id == uci).first()
-            if not character:
-                character = await marvel.get_character_by_id(uci)
-                print(f'getting {character.name} from marvel-----------------')
-                db.add(character)
+            if character:
+                character_id2character[character.marvel_id] = character
+                continue
+            tasks.append(marvel.get_character_by_id(uci))
+
+        # Gather faster using throttled concurrent requests.
+        characters = await semaphore_gather(tasks, 5)
+        for character in characters:
             character_id2character[character.marvel_id] = character
+            db.add(character)
 
         for comics_relationship in comics_relationships:
             comic: Comic = comics_relationship['comic']
@@ -38,7 +45,6 @@ async def get_comics_by_character(marvel_id: int, db: Session = Depends(session.
                 # This Comic does not yet exist add the Character relationships then store
                 for character_id in comics_relationship['character_ids']:
                     comic.characters.append(character_id2character[character_id])
-                print(f'storing comic {comic.title}---------------')
                 db.add(comic)
 
         main.comics_updated = datetime.now(timezone.utc)
@@ -56,9 +62,10 @@ async def get_comics_by_character(marvel_id: int, db: Session = Depends(session.
         characters.update(comic.characters)
     for character in characters:
         id2affiliated_character[character.marvel_id] = character.to_dict()
-
+    print('here i am--------')
     return {
         'comic_id2comic': id2comic,
         'affiliated_characters': id2affiliated_character,
-        'discovered_characters': [character.name for character in db.query(desc(Character.created)).limit(50).all()],
+        'discovered_characters': [character.name for character in
+                                  db.query(Character).order_by(desc(Character.created)).limit(50).all()],
     }
