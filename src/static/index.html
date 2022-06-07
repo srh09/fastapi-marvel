@@ -63,12 +63,12 @@
         </div>
         <div class="card__image">
           <img src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
-          <img x-show="!loading" x-transition :src="character.thumbnail" onerror="this.style.display='none'">
+          <img x-show="!loading" x-transition :src="character.thumbnail">
         </div>
           <div class="card__stats">
-            <span>Comics</span>
-            <span>Series</span>
-            <span>Stories</span>
+            <span x-text="character.comics" x-show="!loading" x-transition></span>
+            <span x-text="character.series" x-show="!loading" x-transition></span>
+            <span x-text="character.stories" x-show="!loading" x-transition></span>
           </div>
           <div class="card__name">
             <h3 x-text="character.name" x-show="!loading" x-transition></h3>

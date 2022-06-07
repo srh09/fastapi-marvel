@@ -23,6 +23,7 @@ class Character(Common):
             'name': self.name,
             'comic_count': self.comic_count,
             'series_count': self.series_count,
+            'stories_count': self.stories_count,
             'description': self.description,
             'thumbnail': self.thumbnail,
         }

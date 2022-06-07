@@ -3,7 +3,10 @@ const EMPTY_CHARACTER = {
     'marvel_id': '12345',
     'name': null,
     'description': null,
-    'thumbnail': Error.src,  // Hackz
+    'comics': 'Comics: ',
+    'series': 'Series: ',
+    'stories': 'Stories: ',
+    'thumbnail': ' ',
 };
 
 const asyncTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
@@ -49,12 +52,22 @@ const marvel = () => {
                 response = await sendAsyncRequest('GET', `/api/v1/character?name=${this.characterSearch}`);
             } catch (error) {
                 // TODO: Some kind of 'character not found' banner on 404?
-                response = EMPTY_CHARACTER;
+                this.loading = false;
+                return;
             }
 
             // Bind the data.
-            this.character = (response && Object.keys(response).length) ? response : EMPTY_CHARACTER;
-            
+            // this.character = (response && Object.keys(response).length) ? response : EMPTY_CHARACTER;
+            this.character = {
+                'marvel_id': response['marvel_id'],
+                'name': response['name'],
+                'description': response['description'],
+                'comics': `Comics: ${response['comic_count']}`,
+                'series': `Series: ${response['series_count']}`,
+                'stories': `Stories: ${response['stories_count']}`,
+                'thumbnail': response['thumbnail'],
+            }
+
             // Timeout for image load.
             await asyncTimeout(1000);
 
