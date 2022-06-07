@@ -1,6 +1,6 @@
 import hashlib
 from datetime import datetime
-from typing import List, Optional, Set, Tuple
+from typing import Dict, List, Optional
 
 import aiohttp
 from requests import HTTPError
@@ -79,7 +79,7 @@ async def get_character_by_name(name: str) -> Optional[Character]:
     })
 
 
-async def get_comics_by_character_id(marvel_id: int) -> Tuple[List[Comic], Set[int]]:
+async def get_comics_by_character_id(marvel_id: int) -> List[Dict]:
     """
     :param int marvel_id: Marvel API id of the Character to be referenced.
     :return: List Comics and affiliated Character marvel_ids
@@ -112,22 +112,30 @@ async def get_comics_by_character_id(marvel_id: int) -> Tuple[List[Comic], Set[i
     print(offset)
     print(increment)
     # Organize the results.
-    comics: List[Comic] = []
+    comics_relationships: List[Dict] = []
+    unique_character_ids = set()
     for result in results:
-        url_detail = None  # How unreadable would this be in a comprehension?
+        # Get the url_detail property for Comic
+        url_detail = None
         for url in result['urls']:
             if url['type'] == 'detail':
                 url_detail = url['url']
                 break
-        comics.append(Comic(**{
-            'marvel_id': result['id'],
-            'issue_number': result['issueNumber'],
-            'page_count': result['pageCount'],
-            'isbn': result['isbn'],
-            'title': result['title'],
-            'description': result['description'],
-            'url_detail': url_detail,
-            'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
-        }))
-    unique_marvel_ids = {int(item['resourceURI'].split('/')[-1]) for item in result['characters']['items']}
-    return comics, unique_marvel_ids
+
+        # Extract the Comic and its Character relationships.
+        character_ids = [int(item['resourceURI'].split('/')[-1]) for item in result['characters']['items']]
+        unique_character_ids.update(character_ids)
+        comics_relationships.append({
+            'comic': Comic(**{
+                'marvel_id': result['id'],
+                'issue_number': result['issueNumber'],
+                'page_count': result['pageCount'],
+                'isbn': result['isbn'],
+                'title': result['title'],
+                'description': result['description'] or '',
+                'url_detail': url_detail,
+                'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
+            }),
+            'character_ids': character_ids
+        })
+    return comics_relationships, unique_character_ids

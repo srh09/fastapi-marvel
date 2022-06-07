@@ -17,7 +17,7 @@ class Common(Base):
             if hasattr(self, key):
                 setattr(self, key, value)
 
-    def to_dict(self):
-        d = self.__dict__.copy()
-        d.pop('_sa_instance_state', None)
-        return d
+    # def to_dict(self):
+    #     d = self.__dict__.copy()
+    #     d.pop('_sa_instance_state', None)
+    #     return d

@@ -1,14 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.orm import relationship
 
 from db.base_class import Common
-
-
-# character_comic = Table(
-#     'character_comic',
-#     Base.metadata,
-#     Column('comic_id', ForeignKey('comic.id'), primary_key=True),
-#     Column('character_id', ForeignKey('character.id'), primary_key=True),
-# )
+from models.relationship import character_comic
 
 
 class Character(Common):
@@ -21,4 +15,14 @@ class Character(Common):
     description = Column(String, nullable=False)
     thumbnail = Column(String, nullable=False)
     comics_updated = Column(DateTime)
-    # comics = relationship('Comic', secondary=character_comic, back_populates='characters')
+    comics = relationship('Comic', secondary=character_comic, back_populates='characters')
+
+    def to_dict(self):
+        return {
+            'marvel_id': self.marvel_id,
+            'name': self.name,
+            'comic_count': self.comic_count,
+            'series_count': self.series_count,
+            'description': self.description,
+            'thumbnail': self.thumbnail,
+        }
