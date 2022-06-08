@@ -1,6 +1,7 @@
 const BASE_URI = 'http://127.0.0.1:8000';
 const EMPTY_CHARACTER = {
-    'marvel_id': '12345',
+    'hasData': false,
+    'marvelId': '12345',
     'name': null,
     'description': null,
     'comics': 'Comics: ',
@@ -8,6 +9,11 @@ const EMPTY_CHARACTER = {
     'stories': 'Stories: ',
     'thumbnail': ' ',
 };
+
+const EMPTY_COMICS = {
+    'hasData': false,
+
+}
 
 const asyncTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
 const sendAsyncRequest = async (method, endpoint, payload) => {
@@ -26,22 +32,20 @@ const sendAsyncRequest = async (method, endpoint, payload) => {
 
 const marvel = () => {
     return {
-        loading: false,
         characterSearch: '',
         character: EMPTY_CHARACTER,
         async clearCharacter() {
-            this.loading = true;
-            await asyncTimeout(250);
+            this.character.hasData = false;
             this.characterSearch = ''
+            await asyncTimeout(250);
             this.character = EMPTY_CHARACTER
-            this.loading = false;
         },
-        async getByNameCharacter() {
+        async getCharacterByName() {
             // Dont send on empty.
-            if (!this.characterSearch) return
+            if (!this.characterSearch) return;
 
             // Fade out elements.
-            this.loading = true;
+            this.character.hasData = false;
 
             // Timeout for animation.
             await asyncTimeout(250);
@@ -52,14 +56,13 @@ const marvel = () => {
                 response = await sendAsyncRequest('GET', `/api/v1/character?name=${this.characterSearch}`);
             } catch (error) {
                 // TODO: Some kind of 'character not found' banner on 404?
-                this.loading = false;
                 return;
             }
 
             // Bind the data.
             // this.character = (response && Object.keys(response).length) ? response : EMPTY_CHARACTER;
             this.character = {
-                'marvel_id': response['marvel_id'],
+                'marvelId': response['marvel_id'],
                 'name': response['name'],
                 'description': response['description'],
                 'comics': `Comics: ${response['comic_count']}`,
@@ -70,9 +73,13 @@ const marvel = () => {
 
             // Timeout for image load.
             await asyncTimeout(1000);
-
+            console.log('here----')
             // Fade in elements.
-            this.loading = false;
+            this.character.hasData = true;
+        },
+        async getComicsByCharacter() {
+            console.log('get comics by character------')
+            // response = await sendAsyncRequest('GET', `/api/v1/comics/character/${this.character.marvelId}`)
         }
     }
 }

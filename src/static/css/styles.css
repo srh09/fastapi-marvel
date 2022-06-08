@@ -29,10 +29,18 @@ nav {
 
 main {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     flex: 1 1 auto;
     background: var(--primary);
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
 }
 
 .row.footer {
@@ -40,13 +48,17 @@ main {
 }
 
 /* Helper Class for All */
-/* .fade {
-    transition: opacity 500ms ease-in-out;
+.shadow {
+    border-radius: 12px;
+    background-color: lightgray;
 }
 
-.fade.transparent {
-    opacity: 0;
-} */
+.shadow > * {
+    background-color: white;
+    border-radius: 12px;
+    height: 100%;
+    width: 100%;
+}
 
 /* Navbar */
 .nav-list {
@@ -158,9 +170,10 @@ main {
 
 
 /* Card */
-.detail-card {
+.card {
     display: flex;
     flex-direction: column;
+    min-height: 620px;
     width: 300px;
     background-color: white;
     border: 1px solid #bacdd8;
@@ -185,9 +198,14 @@ main {
 }
 
 .card__stats {
+    height: 40px;
     margin-top: 15px;
+}
+
+.card__stats div {
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -205,43 +223,25 @@ main {
     font-size: 24px;
     font-weight: 600;
     margin-top: 15px;
-    border-radius: 12px;
     color: var(--primary);
-    background-color: lightgray;
 }
 
 .card__name h3 {
-    height: 100%;
-    width: 100%;
     margin: 0;
-    background-color: white;
-}
-
-.card__name h3:empty {
-    background-color: transparent;
 }
 
 .card__description {
     height: 100px;
     margin-top: 15px;
-    border-radius: 12px;
-    background-color: lightgray;
 }
 
 .card__description textarea {
-    height: 100%;
-    width: 100%;
     border: none;
     resize: none;
     font-family: inherit;
     font-size: 14px;
     line-height: 150%;
     color: var(--primary);
-    background-color: white;
-}
-
-.card__description textarea:empty {
-    background-color: transparent;
 }
 
 .card__resources {
@@ -263,7 +263,11 @@ main {
     transition: 500ms all ease-in;
 }
 
-.card__resources button:hover {
+.card__resources button:disabled {
+    opacity: 0.3;
+}
+
+.card__resources button:hover:not(:disabled) {
     background-color: var(--primaryL);
     color: var(--primary);
 }
@@ -284,6 +288,30 @@ main {
     background-color: var(--primary);
     color: #e0efff;
 } */
+
+/* List Card */
+.list__content {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background-color: red;
+}
+
+.list__content li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 10px;
+    min-height: 30px;
+    list-style: none;
+}
+
+.list__content li span {
+    /* display: flex; */
+    flex-grow: 1;
+    padding-left: 10px;
+}
 
 
 @keyframes runAway {

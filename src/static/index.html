@@ -47,11 +47,12 @@
     </section>
 
     <section id="marvel" x-show="navActive == 'marvel'" x-data="marvel()">
-      <div class="detail-card">
+
+      <div class="card">
         <div class="search">
           <form>
             <input class="search__input" type="text" placeholder="Character Search" x-model="characterSearch">
-            <svg @click="getByNameCharacter()" class="search__glass" viewBox="0 0 512 512" width="100">
+            <svg @click="getCharacterByName()" class="search__glass" viewBox="0 0 512 512" width="100">
               <path
                 d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z" />
             </svg>
@@ -63,25 +64,39 @@
         </div>
         <div class="card__image">
           <img src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
-          <img x-show="!loading" x-transition :src="character.thumbnail">
+          <img x-show="character.hasData" x-transition :src="character.thumbnail">
         </div>
-          <div class="card__stats">
-            <span x-text="character.comics" x-show="!loading" x-transition></span>
-            <span x-text="character.series" x-show="!loading" x-transition></span>
-            <span x-text="character.stories" x-show="!loading" x-transition></span>
+          <div class="card__stats shadow">
+            <div x-show="character.hasData" x-transition class="content">
+              <span x-text="character.comics"></span>
+              <span x-text="character.series"></span>
+              <span x-text="character.stories"></span>
+            </div>
           </div>
-          <div class="card__name">
-            <h3 x-text="character.name" x-show="!loading" x-transition></h3>
+          <div class="card__name shadow">
+            <h3 x-text="character.name" x-show="character.hasData" x-transition></h3>
           </div>
-          <div class="card__description">
-            <textarea x-text="character.description" x-show="!loading" x-transition cols="30" rows="10" disabled></textarea>
+          <div class="card__description shadow">
+            <textarea x-text="character.description" x-show="character.hasData" x-transition cols="30" rows="10" disabled></textarea>
           </div>
           <div class="card__resources">
-            <button>Comics</button>
-            <button>Affiliates</button>
-            <button>Temp</button>
+            <button @click="getComicsByCharacter()" :disabled="!character.hasData">Comics</button>
+            <button :disabled="!character.hasData">Affiliates</button>
+            <button :disabled="!character.hasData">Temp</button>
           </div>
       </div>
+
+      <div class="card">
+        <ul class="list__content">
+          <li class="shadow">
+            <span>List item text here</span>
+          </li>
+          <li class="shadow">
+            <span>List item text here</span>
+          </li>
+        </ul>
+      </div>
+
     </section>
   </main>
 
