@@ -40,6 +40,6 @@ async def get_comics_by_character(marvel_id: int, db: Session = Depends(session.
         db.add(main)
         db.commit()
 
-    return {'comics': [comic.to_dict() for comic in main.comics]}
+    return comic_id2comic
     # 'discovered_characters': [character.name for character in
     #                               db.query(Character).order_by(desc(Character.created)).limit(50).all()],

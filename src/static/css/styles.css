@@ -27,22 +27,6 @@ nav {
     flex: 0 1 40px;
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    flex: 1 1 auto;
-    background: var(--primary);
-}
-
-section {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-}
-
 .row.footer {
   flex: 0 1 40px;
 }
@@ -60,50 +44,103 @@ section {
     width: 100%;
 }
 
+.stretch {
+    flex-grow: 1;
+}
+
 /* Navbar */
-.nav-list {
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+nav ul {
     flex: 0 1 auto;
     height: 40px;
     display: flex;
+    flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    width: 1050px;
     margin: 0;
     padding: .5rem 0;
     border-radius: 8px;
     background-color: white;
 }
 
-.nav-item {
+.nav__item {
     list-style: none;
     margin-right: 2rem;
 }
 
-.nav-item a {
+.nav__item a {
     text-decoration: none;
     color: black;
     transition: all 200ms ease-in;
 }
 
-.nav-item a:hover {
+.nav__item a:hover {
     color: var(--accent);
 }
 
-.nav-item:first-child {
+.nav__item:first-child {
     margin-left: 2rem;
     margin-right: .5rem;
 }
 
-.nav-item:nth-child(2) {
+.nav__item:nth-child(2) {
     margin-right: auto;
+}
+
+/* Main */
+main {
+    flex: 1 1 auto;
+    display: flex;
+    background: var(--primary);
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
 }
 
 
 /* Menu Card */
-.menu-card {
+.card {
     padding: 8px;
     border-radius: 12px;
-    border: 1px solid #bacdd8;
+    border: 2px solid #bacdd8;
     background-color: white;
+}
+
+/* Marvel */
+.marvel__main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.marvel__discovered {
+    flex-grow: 1;
+    min-width: 980px;
+    margin: 5px 15px 15px 15px;
+    background-color: white;
+}
+
+/* Card */
+.card__marvel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 620px;
+    width: 300px;
+    margin: 10px;
 }
 
 /* Search Bar */
@@ -113,7 +150,6 @@ section {
     align-items: center;
     height: 35px;
     width: auto;
-    margin-bottom: 15px;
 }
 
 .search form {
@@ -168,19 +204,6 @@ section {
     fill: red;
 }
 
-
-/* Card */
-.card {
-    display: flex;
-    flex-direction: column;
-    min-height: 620px;
-    width: 300px;
-    background-color: white;
-    border: 1px solid #bacdd8;
-    padding: 12px;
-    border-radius: 12px;
-}
-
 .card__image {
     position: relative;
     height: 300px;
@@ -197,19 +220,18 @@ section {
     left: 0;
 }
 
-.card__stats {
-    height: 40px;
-    margin-top: 15px;
+.card__chips {
+    height: 35px;
 }
 
-.card__stats div {
+.card__chips div {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
-.card__stats span {
+.card__chips span {
     padding: 4px 8px;
     font-size: 12px;
     font-weight: 600;
@@ -219,20 +241,20 @@ section {
 }
 
 .card__name {
-    height: 40px;
-    font-size: 24px;
-    font-weight: 600;
-    margin-top: 15px;
+    height: 43px;
     color: var(--primary);
 }
 
 .card__name h3 {
     margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 0;
+    overflow: hidden;
 }
 
 .card__description {
     height: 100px;
-    margin-top: 15px;
 }
 
 .card__description textarea {
@@ -245,10 +267,9 @@ section {
 }
 
 .card__resources {
-    margin-top: 15px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .card__resources button {
@@ -272,47 +293,46 @@ section {
     color: var(--primary);
 }
 
-/* .detail-card button {
-    border: none;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-weight: 600;
+.card__stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    height: 30px;
     color: var(--primary);
-    background-color: var(--primaryL);
-    margin: 0 auto;
-    display: block;
-    cursor: pointer;
 }
 
-.detail-card button:hover {
-    background-color: var(--primary);
-    color: #e0efff;
-} */
+.card__stat p, a {
+    padding: 7px 0 7px;
+}
 
 /* List Card */
 .list__content {
     flex: auto;
     display: flex;
     flex-direction: column;
+    margin: 0;
     padding: 0;
-    background-color: red;
+    overflow-y: scroll;
 }
 
 .list__content li {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-bottom: 10px;
-    min-height: 30px;
+    margin: 0 5px 10px 0;
+    padding: 3px;
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    box-shadow: 3px 3px 1px;
     list-style: none;
+    color: var(--primary);
+    cursor: pointer;
+    transition: 500ms all ease-in;
 }
 
-.list__content li span {
-    /* display: flex; */
-    flex-grow: 1;
-    padding-left: 10px;
+.list__content li:hover {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: white;
 }
-
 
 @keyframes runAway {
     1%, 9% { transform: translate(-1px, 0); }
