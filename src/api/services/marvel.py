@@ -137,14 +137,14 @@ async def get_comics_by_character_id(marvel_id: int) -> List[Comic]:
     return comics
 
 
-async def get_characters_by_comic_id(marvel_id: int):
+async def get_characters_by_comic(comic: Comic):
     """
     :param int marvel_id: Marvel API id of the Character to be referenced.
     :return: List Comics and affiliated Character marvel_ids
     :raise Exception: exception on http error TODO
     """
     offset = 0
-    uri = f'{MARVEL_BASE_URL}/comics/{marvel_id}/characters?{_get_credentials()}&limit={INCREMENT}'
+    uri = f'{MARVEL_BASE_URL}/comics/{comic.marvel_id}/characters?{_get_credentials()}&limit={INCREMENT}'
 
     results = []
     while True:  # We don't know the total until first response is received.
@@ -166,6 +166,5 @@ async def get_characters_by_comic_id(marvel_id: int):
             'description': result['description'],
             'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
         }))
-    # comic.characters.extend(characters)
-    # db.add(comic)
-    return characters
+
+    return characters, comic
