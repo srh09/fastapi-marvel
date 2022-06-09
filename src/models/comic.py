@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.orm import relationship
 
 from db.base_class import Common
@@ -15,6 +15,7 @@ class Comic(Common):
     description = Column(String, nullable=False)
     url_detail = Column(String, nullable=False)
     thumbnail = Column(String, nullable=False)
+    characters_updated = Column(DateTime)
     characters = relationship('Character', secondary=character_comic, back_populates='comics')
 
     def to_dict(self):

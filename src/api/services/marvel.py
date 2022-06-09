@@ -1,17 +1,19 @@
 import asyncio
 import hashlib
 from datetime import datetime
-from typing import Dict, List, Optional, Set, Tuple
+from typing import List, Optional
 
 import aiohttp
 from requests import HTTPError
+# from sqlalchemy.orm import Session
 
 from core.config import MARVEL_PRIVATE_KEY, MARVEL_PUBLIC_KEY
 from models.character import Character
 from models.comic import Comic
 
 MARVEL_BASE_URL = 'https://gateway.marvel.com/v1/public'
-MAX_RESULTS = 50  # Iron man has 2600 comics alone... Remove this if you want all data.
+MAX_COMIC_RESULTS = 50  # Iron man has 2600 comics alone. This will roughly limit how much data is fetched.
+INCREMENT = 25  # How many records to grab w each request.  Max 100.
 
 
 def _get_credentials():
@@ -61,7 +63,6 @@ async def get_character_by_id(marvel_id: int) -> Character:
         raise TypeError('No Character found for given marvel_id.')
 
     result = response['data']['results'][0]
-    print(f'Character {result["name"]} from Marvel-----------')
     return Character(**{
         'marvel_id': result['id'],
         'comic_count': result['comics']['available'],
@@ -95,57 +96,76 @@ async def get_character_by_name(name: str) -> Optional[Character]:
     })
 
 
-async def get_comics_by_character_id(marvel_id: int) -> Tuple[List[Dict], Set]:
+async def get_comics_by_character_id(marvel_id: int) -> List[Comic]:
     """
     :param int marvel_id: Marvel API id of the Character to be referenced.
     :return: List Comics and affiliated Character marvel_ids
     :raise Exception: exception on http error TODO
     """
     offset = 0
-    increment = 25
-    uri = f'{MARVEL_BASE_URL}/characters/{marvel_id}/comics?{_get_credentials()}&limit={increment}'
+    uri = f'{MARVEL_BASE_URL}/characters/{marvel_id}/comics?{_get_credentials()}&limit={INCREMENT}'
+
     results = []
-
     while True:  # We don't know the total until first response is received.
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f'{uri}&offset={offset}') as response:
-                if response.status != 200:
-                    # TODO Handle error.
-                    raise HTTPError(f'Status: {response.status}, URI: {uri}, Reason: {response.reason}')
-                response = await response.json()
-                results.extend(response['data']['results'])
-                offset += response['data']['count']
-                if offset >= response['data']['total']:
-                    break
-                if len(results) >= MAX_RESULTS:
-                    break
+        print('sending comic request-----')
+        response = await _send_get_request(f'{uri}offset={offset}')
+        results.extend(response['data']['results'])
+        offset += response['data']['count']
+        if offset >= response['data']['total']:
+            break
+        if len(results) >= MAX_COMIC_RESULTS:
+            break
 
-    # Organize the results.
-    comics_relationships: List[Dict] = []
-    unique_character_ids = set()
+    comics = []
     for result in results:
-        # Get the url_detail property for Comic
         url_detail = None
         for url in result['urls']:
             if url['type'] == 'detail':
                 url_detail = url['url']
                 break
 
-        # Extract the Comic and its Character relationships.
-        character_ids = [int(item['resourceURI'].split('/')[-1]) for item in result['characters']['items']]
-        unique_character_ids.update(character_ids)
-        print(f'storing comic {result["title"]} from marvel-----------')
-        comics_relationships.append({
-            'comic': Comic(**{
-                'marvel_id': result['id'],
-                'issue_number': result['issueNumber'],
-                'page_count': result['pageCount'],
-                'isbn': result['isbn'],
-                'title': result['title'],
-                'description': result['description'] or '',
-                'url_detail': url_detail,
-                'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
-            }),
-            'character_ids': character_ids
-        })
-    return comics_relationships, unique_character_ids
+        comics.append(Comic(**{
+            'marvel_id': result['id'],
+            'issue_number': result['issueNumber'],
+            'page_count': result['pageCount'],
+            'isbn': result['isbn'],
+            'title': result['title'],
+            'description': result['description'] or '',
+            'url_detail': url_detail,
+            'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
+        }))
+    return comics
+
+
+async def get_characters_by_comic_id(marvel_id: int):
+    """
+    :param int marvel_id: Marvel API id of the Character to be referenced.
+    :return: List Comics and affiliated Character marvel_ids
+    :raise Exception: exception on http error TODO
+    """
+    offset = 0
+    uri = f'{MARVEL_BASE_URL}/comics/{marvel_id}/characters?{_get_credentials()}&limit={INCREMENT}'
+
+    results = []
+    while True:  # We don't know the total until first response is received.
+        print('sending affiliate request-----')
+        response = await _send_get_request(f'{uri}offset={offset}')
+        results.extend(response['data']['results'])
+        offset += response['data']['count']
+        if offset >= response['data']['total']:
+            break
+
+    characters: List[Character] = []
+    for result in results:
+        characters.append(Character(**{
+            'marvel_id': result['id'],
+            'comic_count': result['comics']['available'],
+            'series_count': result['series']['available'],
+            'stories_count': result['stories']['available'],
+            'name': result['name'],
+            'description': result['description'],
+            'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
+        }))
+    # comic.characters.extend(characters)
+    # db.add(comic)
+    return characters
