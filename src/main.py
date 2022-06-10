@@ -27,7 +27,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    print('things to do when we start-----')
+    print('FastAPI Webserver is starting-----')
 
 app.include_router(test.router)
 app.include_router(character.router)

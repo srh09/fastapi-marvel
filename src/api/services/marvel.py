@@ -79,12 +79,14 @@ async def get_character_by_name(name: str) -> Optional[Character]:
     :param str name: Name of the Character to find.
     :return: The named Character if found.
     """
+    print(f'Reaching out to Marvel for a Character named {name}-----')
     response = await _send_get_request(f'{MARVEL_BASE_URL}/characters?name={name}&{_get_credentials()}')
 
     if not response['data']['results']:
         return None  # Marvel API didn't match a Character to the given Name.
 
     result = response['data']['results'][0]
+    print(f'Received a Character named: {result["name"]}-----')
     return Character(**{
         'marvel_id': result['id'],
         'comic_count': result['comics']['available'],
@@ -107,8 +109,8 @@ async def get_comics_by_character_id(marvel_id: int) -> List[Comic]:
 
     results = []
     while True:  # We don't know the total until first response is received.
-        print('sending comic request-----')
-        response = await _send_get_request(f'{uri}offset={offset}')
+        print(f'Reaching out to Marvel for Comics by Character {marvel_id}-----')
+        response = await _send_get_request(f'{uri}&offset={offset}')
         results.extend(response['data']['results'])
         offset += response['data']['count']
         if offset >= response['data']['total']:
@@ -134,6 +136,8 @@ async def get_comics_by_character_id(marvel_id: int) -> List[Comic]:
             'url_detail': url_detail,
             'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
         }))
+
+    print(f'Received {len(comics)} Comics from Marvel-----')
     return comics
 
 
@@ -147,8 +151,8 @@ async def get_characters_by_comic(comic: Comic):
     uri = f'{MARVEL_BASE_URL}/comics/{comic.marvel_id}/characters?{_get_credentials()}&limit={INCREMENT}'
 
     results = []
-    while True:  # We don't know the total until first response is received.
-        print('sending affiliate request-----')
+    while True:  # Get the total from the first response.
+        print(f'Reaching out to Marvel for Affiliates {comic.marvel_id}-----')
         response = await _send_get_request(f'{uri}offset={offset}')
         results.extend(response['data']['results'])
         offset += response['data']['count']
@@ -166,5 +170,6 @@ async def get_characters_by_comic(comic: Comic):
             'description': result['description'],
             'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
         }))
+        print(f'Discovered Character {result["name"]}-----')
 
     return characters, comic

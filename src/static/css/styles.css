@@ -45,6 +45,7 @@ nav {
 }
 
 .stretch {
+    min-height: 0;  /* https://stackoverflow.com/questions/36230944/prevent-flex-items-from-overflowing-a-container */
     flex-grow: 1;
 }
 
@@ -285,6 +286,7 @@ section {
 }
 
 .card__resources button:disabled {
+    cursor: not-allowed;
     opacity: 0.3;
 }
 

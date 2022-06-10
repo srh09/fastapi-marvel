@@ -24,6 +24,7 @@ class Character(Common):
             'comic_count': self.comic_count,
             'series_count': self.series_count,
             'stories_count': self.stories_count,
+            'has_comics': bool(self.comics_updated),
             'description': self.description,
             'thumbnail': self.thumbnail,
         }
