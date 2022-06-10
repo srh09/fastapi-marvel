@@ -7,5 +7,10 @@ case $1 in
     'build') docker compose -p fastapi build;;
     # 'start') docker compose -p fastapi up web;;
     'stop') docker compose -p fastapi down;;
+    'truncate')
+    psql -U $POSTGRES_USER -d $POSTGRES_DB -c 'TRUNCATE character CASCADE';
+    psql -U $POSTGRES_USER -d $POSTGRES_DB -c 'TRUNCATE comic CASCADE';
+    psql -U $POSTGRES_USER -d $POSTGRES_DB -c 'TRUNCATE character_comic';
+    ;; 
     *) echo 'Invalid selection.  Options: build | start'
 esac
