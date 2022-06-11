@@ -52,7 +52,7 @@ async def get_character_affiliates(marvel_id: int, db: Session = Depends(session
         tasks.append(marvel.get_characters_by_comic(comic))
 
     # Speed this up with asyncio concurrent requests.
-    results = await marvel.semaphore_gather(tasks, 8)
+    results = await marvel.semaphore_gather(tasks, 10)
     for characters, comic in results:
         # Create newly discovered relationships.
         for character in characters:
@@ -70,5 +70,7 @@ async def get_character_affiliates(marvel_id: int, db: Session = Depends(session
         db.add(comic)
 
     db.commit()
+
+    affiliates.pop(marvel_id, None)  # Affiliated with self?  Not for this.
 
     return affiliates

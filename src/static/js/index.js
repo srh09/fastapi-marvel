@@ -1,5 +1,5 @@
 const FADE_TIME = 150
-const BASE_URI = 'http://127.0.0.1:8000';
+const BASE_URI = 'http://localhost:8000';
 
 const asyncTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
 
@@ -21,7 +21,8 @@ const marvel = () => {
     return {
         mode: null,
         characterLoaded: false,
-        itemLoaded: false,
+        comicLoaded: false,
+        affiliateLoaded: false,
         itemsLoaded: false,
         characterSearch: '',
         character: {},
@@ -31,7 +32,8 @@ const marvel = () => {
         affiliates: [],
         async clearCharacter() {
             this.characterLoaded = false;
-            this.itemLoaded = false;
+            this.comicLoaded = false;
+            this.affiliateLoaded = false;
             this.itemsLoaded = false;
             this.characterSearch = '';
             await asyncTimeout(FADE_TIME);  // Allow for fade animation.
@@ -50,7 +52,7 @@ const marvel = () => {
         },
         async getComicsByCharacter() {
             this.itemsLoaded = false;
-            await asyncTimeout(150);
+            await asyncTimeout(FADE_TIME);
             this.mode = 'comics';
             if (this.comics.length == 0) {
                 const response = await sendAsyncRequest('GET', `/api/v1/comics/character/${this.character.marvel_id}`);
@@ -71,13 +73,13 @@ const marvel = () => {
         },
         async getComicDetail(comic) {
             if (this.comic.marvel_id === comic.marvel_id) return;
-            this.itemLoaded = false;
+            this.comicLoaded = false;
             await asyncTimeout(FADE_TIME);
             this.comic = comic;
         },
         async getAffiliateDetail(affiliate) {
             if (this.affiliate.marvel_id === affiliate.marvel_id) return;
-            this.itemLoaded = false;
+            this.affiliateLoaded = false;
             await asyncTimeout(FADE_TIME);
             this.affiliate = affiliate;
         },

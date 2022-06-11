@@ -64,7 +64,7 @@ def _create_character_from_result(result: Dict):
 
 async def semaphore_gather(tasks, task_limit):
     """
-    Limits the max concurrent asyncio tasks.
+    Throttles the number of concurrent asyncio tasks.
     """
     semaphore = asyncio.Semaphore(task_limit)
 
