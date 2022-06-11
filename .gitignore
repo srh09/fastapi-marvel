@@ -8,5 +8,8 @@
 # Python Cached Files
 __pycache__/
 
-# Private Keys
-src/env/*/private.py
+# # Private Keys
+# src/env/*/private.py
+
+# Alembic Versions
+alembic/versions/*
