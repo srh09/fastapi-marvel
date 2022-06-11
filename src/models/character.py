@@ -13,6 +13,8 @@ class Character(Common):
     stories_count = Column(Integer, nullable=False)
     name = Column(String, nullable=False, index=True)
     description = Column(String, nullable=False)
+    url_detail = Column(String, nullable=False)
+    url_wiki = Column(String, nullable=False)
     thumbnail = Column(String, nullable=False)
     comics_updated = Column(DateTime)
     comics = relationship('Comic', secondary=character_comic, back_populates='characters')
@@ -26,5 +28,7 @@ class Character(Common):
             'stories_count': self.stories_count,
             'has_comics': bool(self.comics_updated),
             'description': self.description,
+            'url_detail': self.url_detail,
+            'url_wiki': self.url_wiki,
             'thumbnail': self.thumbnail,
         }

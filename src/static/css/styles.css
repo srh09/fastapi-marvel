@@ -31,7 +31,7 @@ nav {
   flex: 0 1 40px;
 }
 
-/* Helper Class for All */
+/* Helper Classes */
 .shadow {
     border-radius: 12px;
     background-color: lightgray;
@@ -264,7 +264,7 @@ section {
 }
 
 .card__description {
-    height: 100px;
+    height: 110px;
 }
 
 .card__description textarea {

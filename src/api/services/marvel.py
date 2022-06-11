@@ -1,7 +1,7 @@
 import asyncio
 import hashlib
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import aiohttp
 from requests import HTTPError
@@ -38,6 +38,30 @@ async def _send_get_request(uri: str):
             return await response.json()
 
 
+def _create_character_from_result(result: Dict):
+    print(f'Discovered Character {result["name"]}-----')
+
+    url_detail = None
+    url_wiki = None
+    for url in result['urls']:
+        if url['type'] == 'detail':
+            url_detail = url['url']
+        elif url['type'] == 'wiki':
+            url_wiki = url['url']
+
+    return Character(**{
+        'marvel_id': result['id'],
+        'comic_count': result['comics']['available'],
+        'series_count': result['series']['available'],
+        'stories_count': result['stories']['available'],
+        'name': result['name'],
+        'description': result['description'],
+        'url_detail': url_detail,
+        'url_wiki': url_wiki,
+        'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
+    })
+
+
 async def semaphore_gather(tasks, task_limit):
     """
     Limits the max concurrent asyncio tasks.
@@ -62,16 +86,7 @@ async def get_character_by_id(marvel_id: int) -> Character:
     if not response['data']['results']:  # Somehow an invalid id was recorded.
         raise TypeError('No Character found for given marvel_id.')
 
-    result = response['data']['results'][0]
-    return Character(**{
-        'marvel_id': result['id'],
-        'comic_count': result['comics']['available'],
-        'series_count': result['series']['available'],
-        'stories_count': result['stories']['available'],
-        'name': result['name'],
-        'description': result['description'],
-        'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
-    })
+    return _create_character_from_result(response['data']['results'][0])
 
 
 async def get_character_by_name(name: str) -> Optional[Character]:
@@ -85,17 +100,7 @@ async def get_character_by_name(name: str) -> Optional[Character]:
     if not response['data']['results']:
         return None  # Marvel API didn't match a Character to the given Name.
 
-    result = response['data']['results'][0]
-    print(f'Received a Character named: {result["name"]}-----')
-    return Character(**{
-        'marvel_id': result['id'],
-        'comic_count': result['comics']['available'],
-        'series_count': result['series']['available'],
-        'stories_count': result['stories']['available'],
-        'name': result['name'],
-        'description': result['description'],
-        'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
-    })
+    return _create_character_from_result(response['data']['results'][0])
 
 
 async def get_comics_by_character_id(marvel_id: int) -> List[Comic]:
@@ -159,17 +164,4 @@ async def get_characters_by_comic(comic: Comic):
         if offset >= response['data']['total']:
             break
 
-    characters: List[Character] = []
-    for result in results:
-        characters.append(Character(**{
-            'marvel_id': result['id'],
-            'comic_count': result['comics']['available'],
-            'series_count': result['series']['available'],
-            'stories_count': result['stories']['available'],
-            'name': result['name'],
-            'description': result['description'],
-            'thumbnail': f'{result["thumbnail"]["path"]}.{result["thumbnail"]["extension"]}',
-        }))
-        print(f'Discovered Character {result["name"]}-----')
-
-    return characters, comic
+    return [_create_character_from_result(result) for result in results], comic
