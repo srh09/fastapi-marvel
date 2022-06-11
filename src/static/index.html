@@ -14,8 +14,10 @@
     <ul>
       <li class="nav__item">
         <a @click="navActive='home'" href="#">
-          <svg id="logo-svg" fill="none" height="35px" width="35px" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 154 154">
+          <svg @click="$event.target.style.animation = 'runAway 8s'"
+            @mouseenter="$event.target.style.animation = 'runAway 8s'"
+            @animationend="$event.target.style.animation = null" fill="none" height="35px" width="35px"
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154">
             <circle cx="77" cy="77" fill="#05998b" r="77" />
             <path d="M81.375 18.667l-38.75 70H77.5l-3.875 46.666 38.75-70H77.5z" fill="#fff" />
           </svg>
@@ -66,69 +68,98 @@
           <div class="card__image">
             <img
               src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
-            <img x-show="hasCharacter" x-transition :src="character.thumbnail">
+            <img @load="characterLoaded = true" x-show="characterLoaded" x-transition :src="character.thumbnail">
           </div>
           <div class="card__chips shadow">
-            <div x-show="hasCharacter" x-transition class="content">
-              <span x-text="character.comics"></span>
-              <span x-text="character.series"></span>
-              <span x-text="character.stories"></span>
+            <div x-show="characterLoaded" x-transition class="content">
+              <span>Comics: <span x-text="character.comic_count"></span></span>
+              <span>Series: <span x-text="character.series_count"></span></span>
+              <span>Stories: <span x-text="character.stories_count"></span></span>
             </div>
           </div>
           <div class="card__name shadow">
-            <h3 x-text="character.name" x-show="hasCharacter" x-transition></h3>
+            <h3 x-text="character.name" x-show="characterLoaded" x-transition></h3>
           </div>
           <div class="card__description shadow">
-            <textarea x-text="character.description" x-show="hasCharacter && character.description" x-transition cols="30" rows="10"
-              disabled></textarea>
+            <textarea x-text="character.description" x-show="characterLoaded && character.description" x-transition
+              cols="30" rows="10" disabled></textarea>
           </div>
           <div class="card__resources">
-            <button @click="getComicsByCharacter()" :disabled="!hasCharacter">Comics</button>
-            <button :disabled="!hasCharacter || !character.hasComics">Affiliates</button>
+            <button @click="getComicsByCharacter()" :disabled="!characterLoaded">Comics</button>
+            <button @click="getAffiliatesByCharacter()"
+              :disabled="!characterLoaded || !character.has_comics">Affiliates</button>
           </div>
         </div>
-  
+
         <div class="card card__marvel">
           <div class="shadow stretch">
-            <ul x-show="modeLoaded" x-transition class="list__content content">
-              <template x-for="i in items">
-                <li @click="getItemDetail(i)" x-text="i.title"></li>
+            <ul x-show="itemsLoaded && mode == 'comics'" x-transition class="list__content content">
+              <template x-for="c in comics">
+                <li @click="getComicDetail(c)" x-text="c.title"></li>
               </template>
-              <!-- <template x-if="mode == affiliates" x-for="affiliate in affiliates">
-                <li @click="getComicDetail(comic)" x-text="comic.title"></li>
-              </template> -->
+            </ul>
+            <ul x-show="itemsLoaded && mode == 'affiliates'" x-transition class="list__content content">
+              <template x-for="a in affiliates">
+                <li @click="getAffiliateDetail(a)" x-text="a.name"></li>
+              </template>
             </ul>
           </div>
         </div>
-  
-        <!-- <div class="card card__marvel">
-          <div class="card__image">
-            <img
-              src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
-            <img x-show="hasComic" x-transition :src="comic.thumbnail">
-          </div>
-          <div class="card__chips shadow">
-            <div x-show="hasComic" x-transition class="content">
-              <span x-text="comic.issueNumber"></span>
-              <span x-text="comic.pageCount"></span>
+
+        <div class="card card__marvel">
+          <div x-show="mode == null || itemsLoaded && mode == 'comics'" x-transition class="card__contents">
+            <div class="card__image">
+              <img
+                src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
+              <img @load="itemLoaded = true" x-show="itemLoaded" x-transition :src="comic.thumbnail">
+            </div>
+            <div class="card__chips shadow">
+              <div x-show="itemLoaded" x-transition class="content">
+                <span>Issue Number: <span x-text="comic.issue_number"></span></span>
+                <span>Page Count: <span x-text="comic.page_count"></span></span>
+              </div>
+            </div>
+            <div class="card__name shadow">
+              <h3 x-text="comic.title" x-show="itemLoaded" x-transition></h3>
+            </div>
+            <div class="card__description shadow">
+              <textarea x-text="comic.description" x-show="itemLoaded && comic.description" x-transition cols="30"
+                rows="10" disabled></textarea>
+            </div>
+            <div class="card__stat shadow">
+              <p x-text="comic.isbn" x-show="itemLoaded && comic.isbn" x-transition class="content"></p>
+            </div>
+            <div class="card__stat shadow">
+              <p x-show="itemLoaded  && comic.url_detail" x-transition>Get the Details <a :href="comic.url_detail"
+                  class="content">Here</a>!</p>
             </div>
           </div>
-          <div class="card__name shadow">
-            <h3 x-text="comic.title" x-show="hasComic" x-transition></h3>
-          </div>
-          <div class="card__description shadow">
-            <textarea x-text="comic.description" x-show="hasComic" x-transition cols="30" rows="10" disabled></textarea>
-          </div>
-          <div class="card__stat shadow">
-            <p x-text="comic.isbn" x-show="hasComic" x-transition class="content"></p>
-          </div>
-          <div class="card__stat shadow">
-            <p x-show="hasComic" x-transition>Get the Details <a :href="comic.urlDetail" class="content">Here</a>!</p>
+
+          <div x-show="itemsLoaded && mode == 'affiliates'" x-transition class="card__contents" >
+            <div class="card__image">
+              <img
+                src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
+              <img @load="itemLoaded = true" x-show="itemLoaded" x-transition :src="affiliate.thumbnail">
+            </div>
+            <div class="card__chips shadow">
+              <div x-show="itemLoaded" x-transition class="content">
+                <span>Comics: <span x-text="affiliate.comic_count"></span></span>
+                <span>Series: <span x-text="affiliate.series_count"></span></span>
+                <span>Stories: <span x-text="affiliate.stories_count"></span></span>
+              </div>
+            </div>
+            <div class="card__name shadow">
+              <h3 x-text="affiliate.name" x-show="itemLoaded" x-transition></h3>
+            </div>
+            <div class="card__description shadow">
+              <textarea x-text="affiliate.description" x-show="itemLoaded && affiliate.description" x-transition
+                cols="30" rows="10" disabled></textarea>
+            </div>
           </div>
         </div>
       </div>
       <div class="marvel__discovered card">
-      </div> -->
+      </div>
 
     </section>
   </main>

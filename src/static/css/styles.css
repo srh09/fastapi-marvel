@@ -39,7 +39,6 @@ nav {
 
 .shadow > * {
     background-color: white;
-    border-radius: 12px;
     height: 100%;
     width: 100%;
 }
@@ -128,8 +127,9 @@ section {
 }
 
 .marvel__discovered {
+    display: flex;
     flex-grow: 1;
-    min-width: 980px;
+    max-width: 980px;
     margin: 5px 15px 15px 15px;
     background-color: white;
 }
@@ -142,6 +142,13 @@ section {
     height: 620px;
     width: 300px;
     margin: 10px;
+}
+
+.card__contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
 /* Search Bar */
@@ -233,10 +240,13 @@ section {
 }
 
 .card__chips span {
-    padding: 4px 8px;
     font-size: 12px;
     font-weight: 600;
     color: #788697;
+}
+
+.card__chips div > span {
+    padding: 4px 8px;
     border: 2px solid lightgray;
     border-radius: 50px;
 }
@@ -250,7 +260,6 @@ section {
     margin: 0;
     font-size: 1.1rem;
     font-weight: 600;
-    border-radius: 0;
     overflow: hidden;
 }
 
