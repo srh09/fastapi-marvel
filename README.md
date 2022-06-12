@@ -1,5 +1,7 @@
 ## Getting Started
 Come back later for up to date instructions.
+Gifs!?!
+![](marvel-demo.gif)
 <!-- * Install Docker: `https://docs.docker.com/get-docker/`
 * Clone project: `https://github.com/srh09/fast_api_playground.git`
 * Setup a virtual env w Python 3.9: `python -m venv .venv` then `source .venv/bin/activate`
