@@ -165,7 +165,6 @@
       <div class="marvel__discovered">
         <div class="container card">
           <div class="shadow stretch">
-            <!-- <div @DOMContentLoaded.window="console.log('hi-----')" x-show="discoveredLoaded" x-transition class="content"> -->
             <div @load.window="getDiscoveredCharacters()" x-show="discoveredLoaded" x-transition class="content">
               <template x-for="d in discovered">
                 <div class="discovered__chips">
