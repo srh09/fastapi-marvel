@@ -25,6 +25,7 @@ body {
 
 nav {
     flex: 0 1 40px;
+    margin: 5px;
 }
 
 footer {
@@ -40,6 +41,7 @@ footer div {
     justify-content: end;
     flex-grow: 1;
     max-width: 1000px;
+    margin: 5px;
 }
 
 /* Helper Classes */
@@ -86,7 +88,7 @@ nav ul {
 
 .nav__item a {
     text-decoration: none;
-    color: black;
+    color: var(--primary);
     transition: all 200ms ease-in;
 }
 
@@ -264,7 +266,7 @@ section {
 .card__chips span {
     font-size: 12px;
     font-weight: 600;
-    color: #788697;
+    color: var(--primary);
 }
 
 .card__chips div > span {
@@ -390,7 +392,7 @@ section {
 .discovered__chips span {
     font-size: 12px;
     font-weight: 600;
-    color: #788697;
+    color: var(--primary);
 }
 
 @keyframes runAway {
