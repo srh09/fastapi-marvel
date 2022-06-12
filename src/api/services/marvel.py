@@ -39,8 +39,6 @@ async def _send_get_request(uri: str):
 
 
 def _create_character_from_result(result: Dict):
-    print(f'Discovered Character {result["name"]}-----')
-
     url_detail = None
     url_wiki = None
     for url in result['urls']:

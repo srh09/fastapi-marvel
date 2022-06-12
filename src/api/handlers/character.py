@@ -1,8 +1,7 @@
 from datetime import datetime, timezone
-# from itertools import chain
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 
 from db import session
@@ -62,6 +61,7 @@ async def get_character_affiliates(marvel_id: int, db: Session = Depends(session
                 affiliates[c_db.marvel_id] = c_db.to_dict()
                 continue
             # A new Character was discovered.
+            print(f'Discovered Character {character.name}-----')
             db.add(character)
             comic.characters.append(character)
             affiliates[character.marvel_id] = character.to_dict()
@@ -74,3 +74,9 @@ async def get_character_affiliates(marvel_id: int, db: Session = Depends(session
     affiliates.pop(marvel_id, None)  # Affiliated with self?  Not for this.
 
     return affiliates
+
+
+@router.get('/api/v1/characters/discovered')
+async def get_discovered_characters(db: Session = Depends(session.get_db)):
+    return [character.to_dict() for character in
+            db.query(Character).order_by(desc(Character.created)).limit(40).all()]

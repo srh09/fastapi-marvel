@@ -24,12 +24,14 @@ const marvel = () => {
         comicLoaded: false,
         affiliateLoaded: false,
         itemsLoaded: false,
+        discoveredLoaded: false,
         characterSearch: '',
         character: {},
         comic: {},
         comics: [],
         affiliate: {},
         affiliates: [],
+        discovered: [],
         async clearCharacter() {
             this.characterLoaded = false;
             this.comicLoaded = false;
@@ -68,8 +70,15 @@ const marvel = () => {
             if (this.affiliates.length == 0) {
                 const response = await sendAsyncRequest('GET', `/api/v1/character/${this.character.marvel_id}/affiliates`);
                 this.affiliates = Object.values(response);
+                this.getDiscoveredCharacters()
             }
             this.itemsLoaded = true;
+        },
+        async getDiscoveredCharacters() {
+            this.discoveredLoaded = false;
+            await asyncTimeout(FADE_TIME);
+            this.discovered = await sendAsyncRequest('GET', '/api/v1/characters/discovered');
+            this.discoveredLoaded = true;
         },
         async getComicDetail(comic) {
             if (this.comic.marvel_id === comic.marvel_id) return;
@@ -83,8 +92,23 @@ const marvel = () => {
             await asyncTimeout(FADE_TIME);
             this.affiliate = affiliate;
         },
+        async setCharacter(character) {
+            if (this.character.marvel_id == character.marvel_id) return;
+            await this.clearCharacter();
+            this.character = character;
+        }
     };
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('this here-----')
+    // your code here
+ }, false);
+
+ window.addEventListener('DOMContentLoaded', function() {
+    console.log('this here 2-----')
+    // your code here
+ }, false);
 
 const sayHi = () => console.log('Hi there------')
 const sayBye = () => console.log('goodbye-----')

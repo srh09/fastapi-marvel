@@ -49,8 +49,9 @@
     </section>
 
     <section id="marvel" x-show="navActive == 'marvel'" x-data="marvel()">
-
       <div class="marvel__main">
+
+        <!-- Primary Character Card -->
         <div class="card card__marvel">
           <div class="search">
             <form @submit.prevent="getCharacterByName()">
@@ -91,7 +92,8 @@
           </div>
         </div>
 
-        <div class="card card__marvel">
+        <!-- List Card -->
+        <div class="card__marvel card">
           <div class="shadow stretch">
             <ul x-show="itemsLoaded && mode == 'comics'" x-transition class="list__content content">
               <template x-for="c in comics">
@@ -106,7 +108,9 @@
           </div>
         </div>
 
+        <!-- Detail Card -->
         <div class="card card__marvel">
+          <!-- Comic Detail -->
           <div x-show="mode == null || itemsLoaded && mode == 'comics'" x-transition class="card__contents">
             <div class="card__image">
               <img
@@ -120,7 +124,7 @@
               </div>
             </div>
             <div class="card__name shadow">
-              <h3 x-text="comic.title" x-show="comicLoaded  && comic.name" x-transition></h3>
+              <h3 x-text="comic.title" x-show="comicLoaded  && comic.title" x-transition></h3>
             </div>
             <div class="card__stat shadow">
               <p x-text="comic.isbn" x-show="comicLoaded && comic.isbn" x-transition class="content"></p>
@@ -134,8 +138,8 @@
                   class="content" target="_blank" rel="noopener noreferrer">Here</a>!</p>
             </div>
           </div>
-
-          <div x-show="itemsLoaded && mode == 'affiliates'" x-transition class="card__contents" >
+          <!-- Affiliate Detail -->
+          <div x-show="itemsLoaded && mode == 'affiliates'" x-transition class="card__contents">
             <div class="card__image">
               <img
                 src="data:image/svg+xml;base64,PHN2ZwogICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIKICAgIHZpZXdCb3g9IjAgMCA1MDAgNTAwIgogID4KICA8ZwogICAgICBpZD0ibGF5ZXIxIgogICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNTUyLjM2KSIKICAgID4KICAgIDxnIGlkPSJnMzgwMCI+CiAgICAgIDxyZWN0CiAgICAgICAgICBpZD0icmVjdDI5ODciCiAgICAgICAgICBzdHlsZT0iZmlsbDojYjNiM2IzIgogICAgICAgICAgcng9IjAiCiAgICAgICAgICByeT0iMCIKICAgICAgICAgIGhlaWdodD0iNTAwIgogICAgICAgICAgd2lkdGg9IjUwMCIKICAgICAgICAgIHk9IjU1Mi4zNiIKICAgICAgICAgIHg9IjAiCiAgICAgIC8+CiAgICAgIDxwYXRoCiAgICAgICAgICBpZD0icGF0aDMwMDEiCiAgICAgICAgICBkPSJtMy45NDQ4IDEwNDguNCA0OTIuMTItNDkyLjA5IgogICAgICAgICAgc3R5bGU9InN0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDo3Ljg4OTU7ZmlsbDojZmZmZmZmIgogICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICAgIGlkPSJwYXRoMzAwMyIKICAgICAgICAgIGQ9Im0zLjk0NDggNTU2LjMxIDQ5Mi4xMiA0OTIuMDkiCiAgICAgICAgICBzdHlsZT0ic3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjcuODg5NTtmaWxsOiNmZmZmZmYiCiAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgICAgaWQ9InJlY3QzNzczIgogICAgICAgICAgc3R5bGU9ImZpbGw6I2IzYjNiMyIKICAgICAgICAgIGhlaWdodD0iNjMuOTM1IgogICAgICAgICAgd2lkdGg9IjM3Ny42IgogICAgICAgICAgeT0iNzcwLjk0IgogICAgICAgICAgeD0iNjIuMjk1IgogICAgICAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==">
@@ -160,21 +164,36 @@
                   class="content" target="_blank" rel="noopener noreferrer">Here</a>!</p>
             </div>
             <div class="card__stat shadow">
-              <p x-show="affiliateLoaded  && affiliate.url_detail" x-transition>Get the Details <a :href="affiliate.url_detail"
-                  class="content" target="_blank" rel="noopener noreferrer">Here</a>!</p>
+              <p x-show="affiliateLoaded  && affiliate.url_detail" x-transition>Get the Details <a
+                  :href="affiliate.url_detail" class="content" target="_blank" rel="noopener noreferrer">Here</a>!</p>
             </div>
           </div>
         </div>
+
       </div>
-      <div class="marvel__discovered card">
+      <div class="marvel__discovered">
+        <div class="container card">
+          <div class="shadow stretch">
+            <!-- <div @DOMContentLoaded.window="console.log('hi-----')" x-show="discoveredLoaded" x-transition class="content"> -->
+            <div @load.window="getDiscoveredCharacters()" x-show="discoveredLoaded" x-transition class="content">
+              <template x-for="d in discovered">
+                <div class="discovered__chips">
+                  <span @click="setCharacter(d)" x-text="d.name"></span>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
       </div>
 
     </section>
   </main>
 
-  <div class="row footer">
-    <p>Have fun! But dont touch the logo...</p>
-  </div>
+  <footer>
+    <div>
+      <p>Have fun! But dont touch the logo...</p>
+    </div>
+  </footer>
 
 </body>
 
