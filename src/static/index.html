@@ -15,7 +15,7 @@
     <ul>
       <li class="nav__item">
         <a @click="navActive='home'" href="#">
-          <svg @click="$event.target.style.animation = 'runAway 8s'"
+          <svg id="logo" @click="$event.target.style.animation = 'runAway 8s'"
             @mouseenter="$event.target.style.animation = 'runAway 8s'"
             @animationend="$event.target.style.animation = null" fill="none" height="35px" width="35px"
             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154">
@@ -33,19 +33,9 @@
   <main>
     <section x-show="navActive == 'home'">
       <div class="card">
-        <h3>FastAPI Playground</h3>
-        <p>Come try out new ideas with a simple setup. Just don't touch the logo...</p>
-        <button @click="sayHi()">...</button>
-        <button @click="sayBye()">Hi button</button>
-      </div>
-      <div class="card">
         <h3>Who am I?</h3>
         <p>This is meant as a demo for a very basic FastAPI webapp. Statically served HTML/CSS/JS files supported by a
-          Python async API. More on the db later.</p>
-      </div>
-      <div class="card">
-        <h3>Marvel</h3>
-        <p>Under construction</p>
+          Python async API and relational db.  Just the Marvel module for now.  Maybe more in the future.</p>
       </div>
     </section>
 
@@ -188,6 +178,13 @@
       </div>
 
     </section>
+
+    <section x-show="navActive == 'about'">
+      <div class="card">
+        <p>This was going to be about something...  Maybe it will someday!</p>
+      </div>
+    </section>
+
   </main>
 
   <footer>

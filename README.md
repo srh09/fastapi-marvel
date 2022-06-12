@@ -3,7 +3,16 @@ A small full stack webapp that leverages the Marvel Developer API to draw relati
 
 ![marvel-demo gif](marvel-demo.gif)
 
-## Technologies Used
+## Technologies Used / Core Dependencies
+* Frontend:
+    
+    - HTML / CSS
+    - Javascript / AlpineJS
+
+* Backend:
+
+    - Python 3+ / FastApi / Uvicorn / aiohttp
+    - Postgres / SqlAlchemy(ORM) / Alembic(Migrations) / psycopg2(db Driver)
 
 ## Getting Started
 * First order of business is to install a version of Python 3 on your system.  I used Python 3.9 for the development of this project managed by pyenv.  Installation instructions for pyenv can be found in the README [HERE](https://github.com/pyenv/pyenv).
@@ -25,7 +34,7 @@ A small full stack webapp that leverages the Marvel Developer API to draw relati
     export MARVEL_PRIVATE_KEY=''  # Put the API private key here
     ```
     - Every time you edit the .envrc file you will have to type `direnv allow` to leverage the new variables.  This is a security feature.
-    - Note the database variable names, when you install postgres or any other relational db sqlalchemy is going to use the above variables to connect to the database.
+    - Note the database variable names, when you install postgres or any other relational db, sqlalchemy is going to use the above variables to connect to the database.
 
 * Next you will have to install a database to your system, I used postgres, it is free and popular and I didn't want to be left out.  I would suggest downloading and following the instructions [HERE](https://www.postgresql.org/download/).
 
@@ -35,6 +44,7 @@ A small full stack webapp that leverages the Marvel Developer API to draw relati
 * Run `pip install poetry` from the root directory of your project. To install the package manager to the venv.
 * Next run `poetry install` to install all of the package dependencies specified in the pyproject.toml
 * Congrats, the one time setup is complete.  Before executing the scripts from the next part go check out bin/run.sh in the project to see what is being executed.
+* To avoid getting an error in the next step add a folder called 'versions' to fastapi-marvel/alembic path in your project.
 * Run `bin/run.sh generate init` to generate an automated script that will populate the tables and columns of your database.
 * Run `bin/run.sh migrate` to execute the automatically generated script that will populate the database.
 * Run `bin/run.sh local` from the root of the project to start the webserver, then visit `http://localhost:8000/` in your browser (I use Chrome) to see the webapp running locally.

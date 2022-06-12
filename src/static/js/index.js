@@ -99,16 +99,3 @@ const marvel = () => {
         }
     };
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('this here-----')
-    // your code here
- }, false);
-
- window.addEventListener('DOMContentLoaded', function() {
-    console.log('this here 2-----')
-    // your code here
- }, false);
-
-const sayHi = () => console.log('Hi there------')
-const sayBye = () => console.log('goodbye-----')

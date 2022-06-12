@@ -113,14 +113,12 @@ main {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     background: var(--primary);
 }
 
 section {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     flex-grow: 1;
 }
 
@@ -403,7 +401,7 @@ section {
     11% { transform: translate(100px, 40px); }
     13% { transform: translate(200px, 300px); }
     15% { transform: translate(400px, 150px); }
-    18% { transform: translate(-100px, 100px); }
+    19% { transform: translate(-500px, 100px); }
     90% { transform: translate(0, 0); }
     18%, 99% { opacity: 1; }
     19%, 91% { opacity: 0; }
